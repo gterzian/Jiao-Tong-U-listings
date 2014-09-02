@@ -25,7 +25,8 @@
 
 <template name='welcome'>
   
-   <div class="alert alert-info" role="alert"><h1>Welcome, Buy and sell your study books here!</h1>
+   <div class="alert alert-info" role="alert"><h1>Welcome, Buy and sell your study books here! {{> loginButtons}}</h1>
+     
    </div>
   
 </template>
@@ -47,7 +48,7 @@
                 <ul class="nav navbar-nav">
                  
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">All Book Levels <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Choose Book Level<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                     {{#each categories}}
                     <li><a class='choose_category' id='{{this}}' href="#">{{this}}</a></li>
@@ -55,9 +56,7 @@
                     </ul>
                   </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                  <li>{{> loginButtons}}</li>
-                </ul>
+                
               </div>
             
               
@@ -82,6 +81,7 @@
       <div id="new_book" class="panel-collapse collapse ">
         <div class="panel-body">
            <div class="alert alert-info" role="alert">
+             {{#if currentUser}}
             <form class="form-horizontal" role="form">  
               <div class="form-group">
                  <input type="text" class="form-control" id="title" placeholder="title..."> 
@@ -99,6 +99,9 @@
              <button  id='add_book' class="btn btn-default">Add</button>
            </div>
             </form>
+            {{else}}
+            <h2>Please login/register first </h2>
+              {{/if}}
          </div>
         </div>
       </div>
