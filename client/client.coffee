@@ -1,4 +1,5 @@
 Meteor.subscribe("Books")
+Meteor.subscribe("Messages")
 
 categories = ["Beginner 1 - 初一", "Beginner 2 - 初二", "Beginner 3 - 初三", 
               "Intermediate 1 - 中一", "Intermediate 2 - 中二", "Intermediate 3 - 中三",
@@ -8,12 +9,11 @@ conditions = ['Very Good', 'OK', 'Could be better']
 Session.setDefault('current_category', categories[0])
 Session.set('categories', categories)
 
+Template.messages.messages = ->
+  messages.find()
+
 Template.navbar.categories = ->
   categories
-
-Template.navbar.events
-  'click .choose_category': (e,t) ->
-    Session.set('current_category', _.find(categories, (category) -> category is e.currentTarget.id))
 
 Template.books.categories = ->
   categories
@@ -29,9 +29,13 @@ Template.books.books = ->
 
 Template.books.sending_message = (id) ->
   Session.get('sending_message') is id
-  
-Template.books.events
 
+
+Template.navbar.events
+  'click .choose_category': (e,t) ->
+    Session.set('current_category', _.find(categories, (category) -> category is e.currentTarget.id))
+
+Template.books.events
   'click #add_book': (e,t) ->
     e.preventDefault()
     if t.find("#title").value
@@ -54,5 +58,23 @@ Template.books.events
   
   'click #send_message': (e,t) ->
     e.preventDefault()
-    Meteor.call 'sendEmail', books.findOne(_id:Session.get('sending_message')).contact,  Meteor.user().emails[0]['address'] ,'I would like to buy your book', t.find("#message_content").value
+    to = books.findOne(_id:Session.get('sending_message')).contact
+    from = Meteor.user().emails[0]['address']
+    text = t.find("#message_content").value
+    userId = Meteor.userId()
+    book = books.findOne(_id:Session.get('sending_message'))
+    messages.insert
+      to: to
+      from: from
+      text: text
+      userid: userId 
+      book: book
+    console.log(text)
+    Meteor.call(
+      'sendEmail', 
+      to,  
+      from, 
+      'Hi, I would like to buy your book'
+      text
+      )
     Session.set('sending_message', null)
