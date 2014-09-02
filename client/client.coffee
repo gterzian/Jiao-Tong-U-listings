@@ -27,7 +27,6 @@ Template.books.events
   'click #add_book': (e,t) ->
     e.preventDefault()
     if t.find("#title").value
-      console.log(t.find("#category").value)
       books.insert
         category: t.find("#category").value
         title: t.find("#title").value
