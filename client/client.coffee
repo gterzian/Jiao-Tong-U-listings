@@ -14,6 +14,9 @@ Template.navbar.events
   'click .choose_category': (e,t) ->
     Session.set('current_category', _.find(categories, (r) -> r is e.currentTarget.id))
 
+Template.books.categories = ->
+  categories
+  
 Template.books.current_category = ->
   Session.get('current_category')
   

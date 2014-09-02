@@ -89,15 +89,10 @@
              <div class="form-group">
                              <label class="col-sm-2 control-label" for="category">Level:</label>
                              <div class="col-sm-10"><select class=" form-control" id="category" name="category">
-             <option value="Beginner 1 - 初一">Beginner 1 - 初一</option>
-              <option value="Beginner 2 - 初二">Beginner 2 - 初二</option>
-              <option value="Beginner 3 - 初三">Beginner 3 - 初三</option>
-               <option value="Intermediate 1 - 中一">Intermediate 1 - 中一</option>
-               <option value="Intermediate 2 - 中二">Intermediate 2 - 中二</option>
-               <option value="Intermediate 3 - 中三">Intermediate 3 - 中三</option>
-                <option value="Advanced 1 - 高一">Advanced 1 - 高一</option>
-                 <option value="Advanced 2 - 高二">Advanced 2 - 高二</option>
-                  <option value="Advanced 3 - 高三">Advanced 3 - 高三</option>
+                      {{ #each categories }}
+             <option value="{{this}}">{{this}}</option>
+                      {{/each}}
+             
              </select></div>
            </div>
               <div class="form-group">
