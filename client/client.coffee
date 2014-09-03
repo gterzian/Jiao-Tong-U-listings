@@ -1,14 +1,16 @@
 Meteor.subscribe("Books")
 Meteor.subscribe("Conversations")
 Meteor.subscribe("Chats")
+Meteor.subscribe("Watches")
 
 categories = ["Beginner 1 - 初一", "Beginner 2 - 初二", "Beginner 3 - 初三", 
               "Intermediate 1 - 中一", "Intermediate 2 - 中二", "Intermediate 3 - 中三",
                "Advanced 1 - 高一", "Advanced 2 - 高二", "Advanced 3 - 高三"]
-conditions = ['Very Good', 'OK', 'Could be better']
+conditions = ['Like new', 'OK', 'Could be better']
                
 Session.setDefault('current_category', categories[0])
 Session.set('categories', categories)
+Session.set('view_watch', false)
 
 Template.conversations.conversations = ->
   conversations.find()
@@ -24,6 +26,15 @@ Template.books.categories = ->
 
 Template.books.conditions = ->
   conditions
+
+Template.watches.categories = ->
+  categories
+
+Template.watches.conditions = ->
+  conditions
+  
+Template.watches.watches = ->
+  watches.find()
   
 Template.books.current_category = ->
   Session.get('current_category')
@@ -33,6 +44,21 @@ Template.books.books = ->
 
 Template.books.sending_message = (id) ->
   Session.get('sending_message') is id
+  
+Template.watches.events
+  'click #add_watch': (e,t) ->
+    e.preventDefault()
+    unless watches.findOne(condition:t.find("#condition").value, category: t.find("#category").value)
+      watches.insert
+        condition: t.find("#condition").value
+        category: t.find("#category").value
+        userid:  Meteor.userId()
+        contact: Meteor.user().emails[0]['address']
+        
+  'click .remove_watch': (e,t) ->
+    e.preventDefault()
+    console.log(e.currentTarget.id)
+    watches.remove e.currentTarget.id
   
 Template.conversations.events
   'click #send_chat': (e, t) ->
@@ -51,8 +77,10 @@ Template.conversations.events
   'click .accordion': (e, t) ->
     Session.set('chatting', e.target.hash[1...])
 
+
 Template.navbar.events
   'click .choose_category': (e,t) ->
+    e.preventDefault()
     Session.set('current_category', _.find(categories, (category) -> category is e.currentTarget.id))
 
 Template.books.events
@@ -94,3 +122,4 @@ Template.books.events
         book: book
       Meteor.call('sendEmail', to, from, 'Hi, I would like to buy your book', text)
     Session.set('sending_message', null)
+    t.find("#message_content").value = ''

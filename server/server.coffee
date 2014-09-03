@@ -8,6 +8,9 @@ Meteor.publish "Users", ->
 
 Meteor.publish "Conversations", ->
   conversations.find(userid: this.userId)
+
+Meteor.publish "Watches", ->
+  watches.find(userid: this.userId)
   
 True = Match.Where (x) -> 
   x is true

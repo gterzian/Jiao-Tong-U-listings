@@ -1,0 +1,45 @@
+
+<template name='conversations'>
+  <div class="alert alert-success" role="alert"><h1>Chats</h1></div>
+  {{#each conversations}}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" class='accordion' data-parent="#accordion" href="#{{_id}}">
+         {{book.title}}, {{text}}
+        </a>
+      </h4>
+    </div>
+    <div id="{{_id}}" class="panel-collapse collapse ">
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-condensed table-bordered">
+              <thead>
+             <tr>
+                <th>who</th>
+                <th>content</th>
+              </tr>
+            </thead>
+            <tbody>
+             {{#each chats}}
+             <tr>
+               <th>{{user.name}}</th>
+               <th>{{content}}</th>
+             </tr>
+             {{/each}}  
+             </tbody>
+          </table>
+      </div>
+    {{#if chatting _id }}
+       <form class="form-inline" role="form">         
+        <div class="form-group">
+           <input type="text" class="form-control" id="content" placeholder="type something..."> 
+         </div>
+        <button role='submit'  id='send_chat' class="btn btn-default">Send</button>
+       </form>
+       {{/if}}
+      </div>
+    </div>
+  </div>
+  {{/each}}
+</template>
