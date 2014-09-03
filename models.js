@@ -12,8 +12,22 @@ books.allow({
   fetch: ['userid']
 })
 
-messages = new Meteor.Collection('Notes')
-messages.allow({
+conversations = new Meteor.Collection('Conversations')
+conversations.allow({
+  insert: function (userId, doc) {
+    return (userId && doc.userid === userId);
+  },
+  update: function (userId, doc, fields, modifier) {
+    return (userId && doc.userid === userId);
+  },
+  remove: function (userId, doc) {
+    return (userId && doc.userid === userId);
+  },
+  fetch: ['userid']
+})
+
+chats = new Meteor.Collection('Chats')
+chats.allow({
   insert: function (userId, doc) {
     return (userId && doc.userid === userId);
   },

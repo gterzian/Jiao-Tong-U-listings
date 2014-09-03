@@ -1,5 +1,6 @@
 Meteor.subscribe("Books")
-Meteor.subscribe("Messages")
+Meteor.subscribe("Conversations")
+Meteor.subscribe("Chats")
 
 categories = ["Beginner 1 - 初一", "Beginner 2 - 初二", "Beginner 3 - 初三", 
               "Intermediate 1 - 中一", "Intermediate 2 - 中二", "Intermediate 3 - 中三",
@@ -9,8 +10,11 @@ conditions = ['Very Good', 'OK', 'Could be better']
 Session.setDefault('current_category', categories[0])
 Session.set('categories', categories)
 
-Template.messages.messages = ->
-  messages.find()
+Template.conversations.conversations = ->
+  conversations.find()
+
+Template.conversations.chatting = (id) ->
+  Session.get('chatting') is id
 
 Template.navbar.categories = ->
   categories
@@ -29,7 +33,23 @@ Template.books.books = ->
 
 Template.books.sending_message = (id) ->
   Session.get('sending_message') is id
-
+  
+Template.conversations.events
+  'click #send_chat': (e, t) ->
+    e.preventDefault()
+    if t.find("#content").value
+      conversations.update(
+        Session.get('chatting'),
+        $addToSet: 
+          chats:  
+            content: t.find("#content").value
+            time: new Date().getTime()
+            conversation: Session.get('chatting')
+      )
+      t.find("#content").value = ''
+    
+  'click .accordion': (e, t) ->
+    Session.set('chatting', e.target.hash[1...])
 
 Template.navbar.events
   'click .choose_category': (e,t) ->
@@ -58,23 +78,19 @@ Template.books.events
   
   'click #send_message': (e,t) ->
     e.preventDefault()
+    
     to = books.findOne(_id:Session.get('sending_message')).contact
     from = Meteor.user().emails[0]['address']
     text = t.find("#message_content").value
     userId = Meteor.userId()
     book = books.findOne(_id:Session.get('sending_message'))
-    messages.insert
-      to: to
-      from: from
-      text: text
-      userid: userId 
-      book: book
-    console.log(text)
-    Meteor.call(
-      'sendEmail', 
-      to,  
-      from, 
-      'Hi, I would like to buy your book'
-      text
-      )
+    
+    unless conversations.findOne(book:book)
+      conversations.insert
+        to: to
+        from: from
+        text: text
+        userid: userId 
+        book: book
+      Meteor.call('sendEmail', to, from, 'Hi, I would like to buy your book', text)
     Session.set('sending_message', null)

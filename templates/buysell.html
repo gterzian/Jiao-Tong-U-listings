@@ -12,17 +12,14 @@
 
 
 <body>
-
   {{> navbar}}
   <div class='container-fluid'>
-   
+     {{> welcome}} 
     <div class="row">
-
+      <div class="col-xs-12 col-sm-6 col-md-4"> {{> conversations}}</div>
       <div class="col-xs-12 col-sm-6 col-md-8">
-        {{> welcome}} 
         {{> books}}
       </div>
-       <div class="col-xs-6 col-md-4"> {{> messages}}</div>
     </div>
  </div>
 </body>
@@ -35,18 +32,49 @@
   
 </template>
 
-<template name='messages'>
-  
-  <ul>  
-  {{#each messages}}
-  <li>
-   {{book.title}}
-   {{text}}
-  </li> 
+<template name='conversations'>
+  <div class="alert alert-success" role="alert"><h1>Chats</h1></div>
+  {{#each conversations}}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" class='accordion' data-parent="#accordion" href="#{{_id}}">
+         {{book.title}}, {{text}}
+        </a>
+      </h4>
+    </div>
+    <div id="{{_id}}" class="panel-collapse collapse ">
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-condensed table-bordered">
+              <thead>
+             <tr>
+                <th>who</th>
+                <th>content</th>
+              </tr>
+            </thead>
+            <tbody>
+             {{#each chats}}
+             <tr>
+               <th>{{user.name}}</th>
+               <th>{{content}}</th>
+             </tr>
+             {{/each}}  
+             </tbody>
+          </table>
+      </div>
+    {{#if chatting _id }}
+       <form class="form-inline" role="form">         
+        <div class="form-group">
+           <input type="text" class="form-control" id="content" placeholder="type something..."> 
+         </div>
+        <button role='submit'  id='send_chat' class="btn btn-default">Send</button>
+       </form>
+       {{/if}}
+      </div>
+    </div>
+  </div>
   {{/each}}
-</ul>
-  
-  
 </template>
 
 
@@ -77,9 +105,6 @@
                 </ul>
                 
               </div>
-            
-              
-              
       </div>
     </nav> 
 </template>
@@ -87,7 +112,7 @@
 
 
 <template name='books'>
-  
+  <div class="alert alert-success" role="alert"><h1>Books in {{current_category}}</h1></div>
   <div class="panel-group" id="accordion">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -143,10 +168,6 @@
     </div>
   </div>
   
-  
-  <h1>Books in {{current_category}}</h1>
-  
-  
   {{ #each books }}
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -168,11 +189,11 @@
               <button role='submit'  id='send_message' class="btn btn-default">Send</button>
              </form>
        {{else}}
-       <button type="button" id='{{_id}}' class="contact_owner btn btn-default" >Contact owner</button>
+       <button type="button" id='{{_id}}' class="contact_owner btn btn-default" >Chat with owner</button>
        {{/if}}
        {{ else }}
-         <button type="button" class="btn btn-default" disabled="disabled">Contact onwer</button>
-         <p>Please log in before contacting owner</p>
+         <button type="button" class="btn btn-default" disabled="disabled">Chat with onwer</button>
+         <p>Please log-in/register before contacting owner</p>
        {{/if}}
       </div>
     </div>
