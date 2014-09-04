@@ -11,3 +11,6 @@ conditions = ['Like new', 'OK', 'Could be better']
 Session.setDefault('current_category', categories[0])
 Session.set('categories', categories)
 Session.set('view_watch', false)
+
+
+

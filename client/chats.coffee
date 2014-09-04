@@ -1,8 +1,14 @@
+
+
 Template.conversations.conversations = ->
   conversations.find()
 
 Template.conversations.chatting = (id) ->
   Session.get('chatting') is id
+  
+Template.conversations.new_chat = (id) ->
+  Session.get('new_chat') is id
+  
   
 
 Template.conversations.events
@@ -20,4 +26,7 @@ Template.conversations.events
       t.find("#content").value = ''
     
   'click .accordion': (e, t) ->
-    Session.set('chatting', e.target.hash[1...])
+    conversation_id = e.target.hash[1...]
+    Session.set('chatting', conversation_id)
+    if Session.get('new_chat') is conversation_id
+      Session.set('new_chat', false)

@@ -13,6 +13,8 @@ Template.books.books = ->
 Template.books.sending_message = (id) ->
   Session.get('sending_message') is id
 
+
+
 Template.books.events
   'click #add_book': (e,t) ->
     e.preventDefault()
@@ -27,6 +29,8 @@ Template.books.events
         contact: Meteor.user().emails[0]['address']
       t.find("#title").value = ''
       t.find("#price").value = ''
+      watches.find(condition: t.find("#condition").value, category: t.find("#category").value).forEach (watch) ->
+        Meteor.call('sendEmail', watch.contact, 'default@meteor.com', "A matching book was posted", "Please take a look on the website, a book matching your search was posted a moment ago.")
       
   'click .contact_owner': (e,t) ->
     Session.set('sending_message', e.currentTarget.id)
@@ -36,20 +40,19 @@ Template.books.events
   
   'click #send_message': (e,t) ->
     e.preventDefault()
-    
-    to = books.findOne(_id:Session.get('sending_message')).contact
+    book = books.findOne(_id:Session.get('sending_message'))
+    to = book.contact
     from = Meteor.user().emails[0]['address']
     text = t.find("#message_content").value
     userId = Meteor.userId()
-    book = books.findOne(_id:Session.get('sending_message'))
-    
     unless conversations.findOne(book:book)
       conversations.insert
+        users: [book.userid, userId]
         to: to
         from: from
         text: text
         userid: userId 
         book: book
-      Meteor.call('sendEmail', to, from, 'Hi, I would like to buy your book', text)
+      Meteor.call('sendEmail', to, from, 'Hi, someone would like to buy your book', text)
     Session.set('sending_message', null)
     t.find("#message_content").value = ''

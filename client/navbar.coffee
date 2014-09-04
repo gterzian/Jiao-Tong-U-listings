@@ -1,10 +1,6 @@
 
-
-
-
 Template.navbar.categories = ->
   categories
-
 
 
 Template.navbar.events
