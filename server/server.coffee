@@ -1,5 +1,7 @@
 Meteor.startup -> 
-  
+  Meteor.onConnection (connection) ->
+    connection.onClose () ->
+      console.log('closed')
 
 Meteor.publish "Books", -> 
   books.find()

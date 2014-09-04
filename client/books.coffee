@@ -1,18 +1,27 @@
 Template.books.categories = ->
   categories
 
+Template.books.index = (cat) ->
+  _.indexOf(categories, cat)
+
 Template.books.conditions = ->
   conditions
+
+Template.books.new_book = (category) ->
+  Session.get('new_book') is category
+
+Template.books.new_match = (category) ->
+  Session.get('new_match') is category
   
-Template.books.current_category = ->
-  Session.get('current_category')
+Template.books.books = (category) ->
+  books.find(category:category)
+
+Template.books.book_count = (category) ->
+  books.find(category:category).count()
   
-Template.books.books = ->
-  books.find({category:Session.get('current_category')})
 
 Template.books.sending_message = (id) ->
   Session.get('sending_message') is id
-
 
 
 Template.books.events
@@ -35,8 +44,14 @@ Template.books.events
   'click .contact_owner': (e,t) ->
     Session.set('sending_message', e.currentTarget.id)
   
-  'click .accordion': (e,t) ->
-    Session.set('sending_message', null)
+  'click .view_books': (e,t) ->
+    index = _.indexOf(categories, Session.get('new_book'))
+    match_index = _.indexOf(categories, Session.get('new_match'))
+    target = e.target.hash[1...]
+    if target is "#{index}"
+      Session.set('new_book', null)
+    if target is "#{match_index}"
+      Session.set('new_match', null)
   
   'click #send_message': (e,t) ->
     e.preventDefault()
@@ -48,6 +63,7 @@ Template.books.events
     unless conversations.findOne(book:book)
       conversations.insert
         users: [book.userid, userId]
+        watched: [userId,]
         to: to
         from: from
         text: text

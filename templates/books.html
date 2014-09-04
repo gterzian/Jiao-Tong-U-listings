@@ -2,9 +2,10 @@
  
   <div class="panel panel-success">
     <div class="panel-heading">
-      <h3 class="panel-title">Books in {{current_category}}</h3>
+      <h3 class="panel-title">Books</h3>
     </div>
     <div class="panel-body">
+      
       <div class="panel-group" id="accordion">
         <div class="panel panel-success">
           <div class="panel-heading">
@@ -58,42 +59,60 @@
             </div>
           </div>
         </div>
-      </div>
-  
-      {{ #each books }}
+     
+      {{ #each categories }}
       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            <a data-toggle="collapse" class='accordion' data-parent="#accordion" href="#{{_id}}">
-             {{title}}, {{condition}}
-            </a>
-        
-          </h4>
-        </div>
-        <div id="{{_id}}" class="panel-collapse collapse ">
-          <div class="panel-body">
-          {{#if currentUser}}
-           {{#if sending_message _id }}
-             <form class="form-inline" role="form">         
-                  <div class="form-group">
-                     <input type="text" class="form-control" id="message_content" placeholder="type something..."> 
-                   </div>
-                  <button role='submit'  id='send_message' class="btn btn-default">Send</button>
-                 </form>
-           {{else}}
-           <button type="button" id='{{_id}}' class="contact_owner btn btn-default" >Chat with owner</button>
-           {{/if}}
-           {{ else }}
-             <button type="button" class="btn btn-default" disabled="disabled">Chat with onwer</button>
-             <p>Please log-in/register before contacting owner</p>
-           {{/if}}
-          </div>
-        </div>
-      </div>
+         <div class="panel-heading">
+           <h4 class="panel-title">
+             <a data-toggle="collapse" class='view_books' data-parent="#accordion" href="#{{index this}}">
+               {{this}} <span class="badge">{{book_count this}}</span> 
+               {{#if new_book this}}
+                  <span class="label label-default">Latest book added</span>
+                 {{/if}}
+                 {{#if new_match this}}
+                    <span class="label label-warning">New match</span>
+                   {{/if}}
+             </a>
+           </h4>
+         </div>
+         <div id="{{index this}}" class="panel-collapse collapse">
+           <div class="panel-body">
+             <ul class="list-group">
+               {{ #each books this }}
+               <li class="list-group-item">
+                 {{title}}, {{condition}}, {{price}}
+                  {{#if currentUser}}
+                    {{#if sending_message _id }}
+                     <form class="form-inline" role="form">
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="message_content" placeholder="type something...">
+                          </div>
+                           <button role='submit' id='send_message' class="btn btn-default">Send</button>
+                     </form>
+                     {{else}}
+                      <button type="button" id='{{_id}}' class="contact_owner btn btn-default" >Chat with owner</button>
+                   {{/if}}
+                 {{ else }}
+                   <button type="button" class="btn btn-default" disabled="disabled">Chat with onwer</button>
+                   <p>Please log-in/register before contacting owner</p>
+                 {{/if}}
+               </li>
+                {{/each}}
+             </ul>
+            
+           </div>
+         </div>
+       </div>
+      
+     
   
       {{ /each }}
+       </div>
       
     </div>
   </div>
  
 </template>
+
+
+        
