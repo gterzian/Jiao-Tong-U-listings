@@ -11,16 +11,6 @@ Meteor.startup ->
   Meteor.subscribe("Matches")  
   
   do -> 
-    query = conversations.find(users: Meteor.userId())
-    handle = query.observeChanges
-      added: (id, conversation) ->
-        unless Meteor.userId() in conversation.watched
-          conversation.watched = _.without(conversation.watched, Meteor.userId())
-      changed: (id, conversation) ->
-        unless Meteor.userId() in conversation.watched
-          conversation.watched = _.without(conversation.watched, Meteor.userId())
-  
-  do -> 
     query = books.find()
     handle = query.observeChanges
       added: (id, book) ->
