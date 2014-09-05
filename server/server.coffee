@@ -1,7 +1,5 @@
 Meteor.startup -> 
-  Meteor.onConnection (connection) ->
-    connection.onClose () ->
-      console.log('closed')
+
 
 Meteor.publish "Books", -> 
   books.find()
@@ -13,7 +11,10 @@ Meteor.publish "Conversations", ->
   conversations.find(users: this.userId)
   
 Meteor.publish "Watches", ->
-  watches.find(userid: this.userId)
+  watches.find(userId: this.userId)
+
+Meteor.publish "Matches", ->
+  matches.find(userId: this.userId)
   
   
 True = Match.Where (x) -> 

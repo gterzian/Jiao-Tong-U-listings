@@ -11,16 +11,14 @@ Template.watches.watches = ->
 Template.watches.events
   'click #add_watch': (e,t) ->
     e.preventDefault()
-    unless watches.findOne(condition:t.find("#condition").value, category: t.find("#category").value)
-      watch_id = watches.insert
+    unless watches.findOne(category: t.find("#category").value, userId:Meteor.userId())
+      watches.insert
         watched: false
-        condition: t.find("#condition").value
         category: t.find("#category").value
-        userid:  Meteor.userId()
+        userId:  Meteor.userId()
         contact: Meteor.user().emails[0]['address']
  
         
   'click .remove_watch': (e,t) ->
     e.preventDefault()
-    console.log(e.currentTarget.id)
     watches.remove e.currentTarget.id

@@ -6,7 +6,8 @@ Meteor.startup ->
   Meteor.subscribe("Books")
   Meteor.subscribe("Conversations")
   Meteor.subscribe("Chats")
-  Meteor.subscribe("Watches")  
+  Meteor.subscribe("Watches") 
+  Meteor.subscribe("Matches")  
   
   do -> 
     query = conversations.find(users: Meteor.userId())
@@ -17,14 +18,14 @@ Meteor.startup ->
       changed: (id, conversation) ->
         unless Meteor.userId() in conversation.watched
           conversation.watched = _.without(conversation.watched, Meteor.userId())
-        
+  
   do -> 
     query = books.find()
     handle = query.observeChanges
       added: (id, book) ->
-        unless book.userid is Meteor.userId()
-          Session.set('new_book', book.category)
-          if watches.findOne(userid:Meteor.userId(), condition:book.condition, category:book.category)
-            Session.set('new_match', book.category)
-     
-  
+        if watches.findOne(category:book.category, userId:Meteor.userId())
+          unless Meteor.userId() is book.userid
+            matches.insert
+              userId: Meteor.userId()
+              category: book.category
+              watched: false

@@ -11,7 +11,7 @@ Template.books.new_book = (category) ->
   Session.get('new_book') is category
 
 Template.books.new_match = (category) ->
-  Session.get('new_match') is category
+  true if matches.find(userId:Meteor.userId(), category:category, watched:false).count()
   
 Template.books.books = (category) ->
   books.find(category:category)
@@ -45,13 +45,13 @@ Template.books.events
     Session.set('sending_message', e.currentTarget.id)
   
   'click .view_books': (e,t) ->
-    index = _.indexOf(categories, Session.get('new_book'))
-    match_index = _.indexOf(categories, Session.get('new_match'))
     target = e.target.hash[1...]
-    if target is "#{index}"
-      Session.set('new_book', null)
-    if target is "#{match_index}"
-      Session.set('new_match', null)
+    cat = categories[target]
+    match = matches.find(category:cat, userId:Meteor.userId(), watched:false)
+    match.forEach (match) ->
+      matches.update(match._id, 
+        $set:
+          watched:true) 
   
   'click #send_message': (e,t) ->
     e.preventDefault()

@@ -29,13 +29,27 @@ conversations.allow({
 watches = new Meteor.Collection('Watches')
 watches.allow({
   insert: function (userId, doc) {
-    return (userId && doc.userid === userId);
+    return (userId && doc.userId === userId);
   },
   update: function (userId, doc, fields, modifier) {
-    return (userId && doc.userid === userId);
+    return (userId && doc.userId === userId);
   },
   remove: function (userId, doc) {
-    return (userId && doc.userid === userId);
+    return (userId && doc.userId === userId);
   },
-  fetch: ['userid']
+  fetch: ['userId']
+})
+
+matches = new Meteor.Collection('Matches')
+matches.allow({
+  insert: function (userId, doc) {
+    return (userId && doc.userId === userId);
+  },
+  update: function (userId, doc, fields, modifier) {
+    return (userId && doc.userId === userId);
+  },
+  remove: function (userId, doc) {
+    return (userId && doc.userId === userId);
+  },
+  fetch: ['userId']
 })
