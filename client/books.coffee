@@ -38,6 +38,7 @@ Template.books.events
         contact: Meteor.user().emails[0]['address']
       t.find("#title").value = ''
       t.find("#price").value = ''
+      $('#new_listing').click()
       watches.find(condition: t.find("#condition").value, category: t.find("#category").value).forEach (watch) ->
         Meteor.call('sendEmail', watch.contact, 'default@meteor.com', "A matching book was posted", "Please take a look on the website, a book matching your search was posted a moment ago.")
       
