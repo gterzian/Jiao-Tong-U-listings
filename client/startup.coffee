@@ -1,4 +1,5 @@
 Meteor.startup ->
+  
   Session.setDefault('current_category', categories[0])
   Session.setDefault('new_book', false)
   Session.set('categories', categories)

@@ -60,7 +60,7 @@ Template.books.events
     from = Meteor.user().emails[0]['address']
     text = t.find("#message_content").value
     userId = Meteor.userId()
-    unless conversations.findOne(book:book)
+    unless conversations.findOne(book:book) or book.userid is Meteor.userId()
       conversations.insert
         users: [book.userid, userId]
         watched: [userId,]
