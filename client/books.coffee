@@ -30,8 +30,6 @@ Template.books.not_own_listing = (book) ->
   not own_listing(book)
   
 
-
-
 Template.books.events
   'click #add_book': (e,t) ->
     e.preventDefault()
@@ -90,3 +88,8 @@ Template.books.events
           time: new Date().getTime()
           conversation: _id
     )
+    
+  'click .remove_listing': (e,t) ->
+    e.preventDefault()
+    books.remove(e.target.id)
+    
