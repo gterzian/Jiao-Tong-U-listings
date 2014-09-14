@@ -21,4 +21,4 @@ Template.watches.events
         
   'click .remove_watch': (e,t) ->
     e.preventDefault()
-    watches.remove e.currentTarget.id
+    watches.remove(e.currentTarget.id)

@@ -9,7 +9,12 @@ Template.conversations.chatting = (id) ->
 Template.conversations.new_chat = (id) ->
   not _.contains(conversations.findOne(id).watched, Meteor.userId())
 
-  
+Template.conversations.get_user = (chat) ->
+  if chat.sender is Meteor.userId()
+    'you'
+  else
+    'the other'
+
   
 Template.conversations.events
   'click #send_chat': (e, t) ->

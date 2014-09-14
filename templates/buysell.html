@@ -15,12 +15,13 @@
   {{> navbar}}
   <div class='container-fluid'>
     <div class="row">
-       <div class="col-xs-12 col-sm-6 col-md-4"> {{> welcome}} </div>
+       
       {{#if currentUser}}
       <div class="col-xs-12 col-sm-6 col-md-8">
        {{> watches}}
       </div>
       {{/if}}
+      <div class="col-xs-12 col-sm-6 col-md-4"> {{> welcome}} </div>
      
      
     </div>
@@ -38,7 +39,33 @@
 <template name='welcome'>
   
    <div class="alert alert-primary" role="alert"><h1>Welcome, Buy and sell your study books here! {{> loginButtons}}</h1>
-     
+     <!-- Button trigger modal -->
+     <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+       How it works?
+     </button>
+
+     <!-- Modal -->
+     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+       <div class="modal-dialog">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+             <h4 class="modal-title" id="myModalLabel">Jiao Tong International Students Listings</h4>
+           </div>
+           <div class="modal-body">
+             My name is Gregory Terzian and I am also studying  Chinese here, this is just a fun side-project and I hope it can help you in some way. 
+             <strong>If you register, your email address will never be shared with anyone.</strong> All communication between the poster of a listing and the responder are via anonymous chat, if you want to share your private contact details you can do so in the chat. Your email will only be used to send you notifications when someone responds to your listing or a new listing matching your watch list has been posted.
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">I understand</button>
+           </div>
+         </div>
+       </div>
+     </div>
+     <div class="btn-group">
+       <button type="button" id='en' class="set-lang btn {{current_lang 'en' }} btn-default">English</button>
+       <button type="button" id='cn' class="set-lang btn {{current_lang 'cn' }} btn-default">中文</button>
+     </div>
    </div>
   
 </template>

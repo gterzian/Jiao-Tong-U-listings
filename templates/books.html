@@ -2,7 +2,7 @@
  
   <div class="panel panel-success">
     <div class="panel-heading">
-      <h3 class="panel-title">Books</h3>
+      <h3 class="panel-title">Listings</h3>
     </div>
     <div class="panel-body">
       
@@ -11,7 +11,7 @@
           <div class="panel-heading">
             <h4 class="panel-title">
               <a data-toggle="collapse" id='new_listing' data-parent="#accordion" href="#new_book">
-                <span class="glyphicon glyphicon-plus"></span> List a book
+                <span class="glyphicon glyphicon-plus"></span> Add a listing
               </a>
             </h4>
           </div>
@@ -24,10 +24,10 @@
                      <input type="text" class="form-control" id="title" placeholder="Title..."> 
                    </div>    
                    <div class="form-group">
-                      <input type="text" class="form-control" id="price" placeholder="Price..."> 
+                      <input type="text" class="form-control" id="description" placeholder="Description..."> 
                     </div>   
                  <div class="form-group">
-                                 <label class="col-sm-2 control-label" for="category">Level:</label>
+                                 <label class="col-sm-2 control-label" for="category">Category:</label>
                                  <div class="col-sm-10">
                                    <select class=" form-control" id="category" name="category">
                           {{ #each categories }}
@@ -37,17 +37,6 @@
                  </select>
                </div>
              </div>
-                 <div class="form-group">
-                                 <label class="col-sm-2 control-label" for="condition">Condition:</label>
-                                 <div class="col-sm-10">
-                                   <select class=" form-control" id="condition" name="condition">
-                          {{ #each conditions }}
-                 <option value="{{this}}">{{this}}</option>
-                          {{/each}}
-             
-                 </select>
-               </div>
-               </div>
                   <div class="form-group">
                  <button  id='add_book' class="btn btn-default">Add</button>
                </div>
@@ -65,7 +54,7 @@
          <div class="panel-heading">
            <h4 class="panel-title">
              <a data-toggle="collapse" class='view_books' data-parent="#accordion" href="#{{index this}}">
-               {{this}} <span class="badge">{{book_count this}}</span> 
+               {{this}} <span class="label label-info">{{book_count this}}</span> 
                {{#if new_book this}}
                   <span class="label label-default">Latest book added</span>
                  {{/if}}
@@ -80,7 +69,7 @@
              <ul class="list-group">
                {{ #each books this }}
                <li class="list-group-item">
-                 {{title}}, {{condition}}, {{price}}
+                 {{title}}, {{description}}
                   {{#if currentUser}}
                     {{#if sending_message _id }}
                      <form class="form-inline" role="form">
@@ -90,10 +79,14 @@
                            <button role='submit' id='send_message' class="btn btn-default">Send</button>
                      </form>
                      {{else}}
-                      <button type="button" id='{{_id}}' class="contact_owner btn btn-default" >Chat with owner</button>
+                      {{#if not_own_listing this}}
+                      <button type="button" id='{{_id}}' class="contact_owner btn btn-default" >Start a chat</button>
+                      {{else}}
+                      <p>this is your own listing</p>
+                      {{/if}}
                    {{/if}}
                  {{ else }}
-                   <button type="button" class="btn btn-default" disabled="disabled">Chat with onwer</button>
+                   <button type="button" class="btn btn-default" disabled="disabled">Start a chat</button>
                    <p>Please log-in/register before contacting owner</p>
                  {{/if}}
                </li>
