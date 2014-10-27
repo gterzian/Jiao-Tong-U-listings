@@ -4,7 +4,6 @@ Meteor.startup ->
       username:options['email'].split('@')[0]
     user
 
-
 Meteor.publish "Books", -> 
   books.find()
 

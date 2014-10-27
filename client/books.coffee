@@ -1,7 +1,6 @@
 own_listing = (book) ->
   book.userid is Meteor.userId()
 
-
 Template.books.categories = ->
   categories
 
@@ -28,7 +27,18 @@ Template.books.sending_message = (id) ->
   
 Template.books.not_own_listing = (book) ->
   not own_listing(book)
-  
+
+Template.books.not_already_talking = (book) ->
+  book = books.findOne(_id:book._id)
+  not conversations.findOne(book:book)
+
+Template.welcome.rendered = -> 
+  $('#loadingModal').modal('show')
+  Tracker.autorun (c) ->
+    if Session.get('ready')
+      $('#loadingModal').modal('hide')
+      c.stop()
+        
 
 Template.books.events
   'click #add_book': (e,t) ->
@@ -66,6 +76,7 @@ Template.books.events
     from = Meteor.user().emails[0]['address']
     text = t.find("#message_content").value
     userId = Meteor.userId()
+    console.log(book)
     unless conversations.findOne(book:book) or own_listing(book)
       _id = conversations.insert
         users: [book.userid, userId]

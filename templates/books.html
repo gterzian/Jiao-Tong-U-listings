@@ -54,7 +54,7 @@
          <div class="panel-heading">
            <h4 class="panel-title">
              <a data-toggle="collapse" class='view_books' data-parent="#accordion" href="#{{index this}}">
-               {{this}} <span class="label label-info">{{book_count this}}</span> 
+               {{this}} {{#if book_count this}}<span class="label label-info">{{book_count this}}</span>{{/if}}
                {{#if new_book this}}
                   <span class="label label-default">Latest book added</span>
                  {{/if}}
@@ -80,7 +80,12 @@
                      </form>
                      {{else}}
                       {{#if not_own_listing this}}
+                       {{#if not_already_talking this}}
                       <button type="button" id='{{_id}}' class="contact_owner btn btn-default" >Start a chat</button>
+                      {{ else }}
+                        <button type="button" class="btn btn-default" disabled="disabled">Start a chat</button>
+                        <p>You already are having a conversation</p>
+                       {{/if}}
                       {{else}}
                       <p>this is your own listing</p>
                        <button type="button" id='{{_id}}' class="remove_listing btn btn-danger" >Remove listing</button>
