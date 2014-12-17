@@ -3,6 +3,9 @@ own_listing = (book) ->
 
 Template.books.categories = ->
   categories
+  
+Template.books.get_trusts = (book) ->
+  trust.find(trusted:book.userid).count()
 
 Template.books.index = (cat) ->
   _.indexOf(categories, cat)
@@ -31,6 +34,10 @@ Template.books.not_own_listing = (book) ->
 Template.books.not_already_talking = (book) ->
   book = books.findOne(_id:book._id)
   not conversations.findOne(book:book)
+  
+Template.welcome.get_trusts = ->
+  console.log((t.userId for t in trust.find(trusted:Meteor.userId()).fetch()))
+  Meteor.users.find(_id: {$in:(t.userId for t in trust.find(trusted:Meteor.userId()).fetch())})
 
 Template.welcome.rendered = -> 
   $('#loadingModal').modal('show')
@@ -51,6 +58,7 @@ Template.books.events
         time: new Date().getTime()
         userid:  Meteor.userId()
         contact: Meteor.user().emails[0]['address']
+        username: Meteor.user().username
       t.find("#title").value = ''
       t.find("#description").value = ''
       $('#new_listing').click()
@@ -76,7 +84,6 @@ Template.books.events
     from = Meteor.user().emails[0]['address']
     text = t.find("#message_content").value
     userId = Meteor.userId()
-    console.log(book)
     unless conversations.findOne(book:book) or own_listing(book)
       _id = conversations.insert
         users: [book.userid, userId]
@@ -85,6 +92,7 @@ Template.books.events
         from: from
         userid: userId 
         book: book
+        username: Meteor.user().username
       Meteor.call('sendEmail', to, from, 'Jiao Tong Listings: someone is interested in your listing', 'new_conversation')
     Session.set('sending_message', null)
     t.find("#message_content").value = ''

@@ -10,6 +10,21 @@ Meteor.startup ->
   Meteor.subscribe("Chats")
   Meteor.subscribe("Watches") 
   Meteor.subscribe("Matches")
+  Meteor.subscribe('Users')
+  Meteor.subscribe('Trust')
+  Accounts.ui.config
+    passwordSignupFields: 'USERNAME_AND_EMAIL'
+    
+  do -> 
+    query = books.find()
+    handle = query.observeChanges
+      added: (id, book) ->
+        if watches.findOne(category:book.category, userId:Meteor.userId())
+          unless Meteor.userId() is book.userid
+            matches.insert
+              userId: Meteor.userId()
+              category: book.category
+              watched: false
   
   i18n.map 'cn', 
     Hello: '你好'
@@ -27,13 +42,3 @@ Meteor.startup ->
     
   i18n.setLanguage('en')  
   
-  do -> 
-    query = books.find()
-    handle = query.observeChanges
-      added: (id, book) ->
-        if watches.findOne(category:book.category, userId:Meteor.userId())
-          unless Meteor.userId() is book.userid
-            matches.insert
-              userId: Meteor.userId()
-              category: book.category
-              watched: false

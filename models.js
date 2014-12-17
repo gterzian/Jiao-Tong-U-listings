@@ -53,3 +53,17 @@ matches.allow({
   },
   fetch: ['userId']
 })
+
+trust = new Meteor.Collection('Trust')
+trust.allow({
+  insert: function (userId, doc) {
+    return (userId && doc.userId === userId);
+  },
+  update: function (userId, doc, fields, modifier) {
+    return (userId && doc.userId === userId);
+  },
+  remove: function (userId, doc) {
+    return (userId && doc.userId === userId);
+  },
+  fetch: ['userId']
+})

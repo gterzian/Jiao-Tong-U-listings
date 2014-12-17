@@ -16,6 +16,17 @@
        </div>
        <div id="{{_id}}" class="panel-collapse collapse ">
          <div class="panel-body">
+           {{#each get_other this}}
+             {{# if trust_other this}}
+              You trust {{this.username}}
+              <button  id='{{this._id}}' class="cancel_trust btn btn-default">Cancel trust {{this.username}} </button>
+             {{/if}}
+             {{# unless trust_other this}}
+             You currently do not trust {{this.username}}
+             <button  id='{{this._id}}' class="trust_other btn btn-default">Trust {{this.username}} </button>
+             {{/unless}}
+            {{/each}}
+           
            <div class="table-responsive">
              <table class="table table-condensed table-bordered">
                  <thead>
