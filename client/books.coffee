@@ -79,7 +79,7 @@ Template.books.events
   'click #send_message': (e,t) ->
     e.preventDefault()
     book = books.findOne(_id:Session.get('sending_message'))
-    to = book.contact
+    to = book.userid
     from = Meteor.user().emails[0]['address']
     text = t.find("#message_content").value
     userId = Meteor.userId()

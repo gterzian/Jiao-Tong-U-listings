@@ -10,7 +10,16 @@ Meteor.startup ->
   Meteor.subscribe("Chats")
   Meteor.subscribe("Watches") 
   Meteor.subscribe("Matches")
-  Meteor.subscribe('Users')
+  Meteor.subscribe('Users', ->
+    console.log('okss')
+    currentUser = Meteor.users.findOne(_id:Meteor.userId())
+    Meteor.users.update(
+      Meteor.userId(),
+      $set:
+        profile:
+          logged_in: true
+          )
+  )
   Meteor.subscribe('Trust')
   Accounts.ui.config
     passwordSignupFields: 'USERNAME_AND_EMAIL'
