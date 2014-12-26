@@ -20,8 +20,6 @@ other_logged_in = (conversation) ->
   if conversation.userid is Meteor.userId()
     Meteor.users.findOne(_id: conversation.book.userid).profile.logged_in
   else
-    console.log("#{Meteor.users.findOne(_id: conversation.userid).username} is #{Meteor.users.findOne(_id: conversation.userid).profile.logged_in} logged in")
-    console.log(Meteor.users.findOne(_id: conversation.userid))
     Meteor.users.findOne(_id: conversation.userid).profile.logged_in    
 
 Template.conversations.conversations = ->
