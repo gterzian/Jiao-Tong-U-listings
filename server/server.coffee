@@ -1,6 +1,9 @@
+userId = null
+
 Meteor.startup -> 
 
   Meteor.publish "Books", -> 
+    userId = this.userId
     books.find()
 
   Meteor.publish "Users", ->
@@ -17,6 +20,27 @@ Meteor.startup ->
   
   Meteor.publish "Trust", ->
     trust.find()
+  
+
+Meteor.onConnection (conn) ->  
+  currentUser = Meteor.users.findOne(_id:userId)
+  Meteor.users.update(
+    userId,
+    $set:
+      logged_in :true
+  )
+  currentUser = Meteor.users.findOne(_id:userId)
+  console.log(currentUser)
+  conn.onClose ->
+    currentUser = Meteor.users.findOne(_id:userId)
+    Meteor.users.update(
+      userId,
+      $set:
+        logged_in :false
+    )
+    currentUser = Meteor.users.findOne(_id:userId)
+    console.log(currentUser)
+
   
   
 True = Match.Where (x) -> 

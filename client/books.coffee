@@ -34,10 +34,9 @@ Template.books.not_own_listing = (book) ->
 Template.books.not_already_talking = (book) ->
   book = books.findOne(_id:book._id)
   not conversations.findOne(book:book)
-  
-Template.welcome.get_trusts = ->
-  console.log((t.userId for t in trust.find(trusted:Meteor.userId()).fetch()))
-  Meteor.users.find(_id: {$in:(t.userId for t in trust.find(trusted:Meteor.userId()).fetch())})
+
+Template.user_profile.get_trusts = (user) ->
+  Meteor.users.find(_id: {$in:(t.userId for t in trust.find(trusted:user._id).fetch())}).count()
 
 Template.welcome.rendered = -> 
   $('#loadingModal').modal('show')
@@ -106,6 +105,7 @@ Template.books.events
           content: text
           time: new Date().getTime()
           conversation: _id
+          username: Meteor.user().username
     )
     
   'click .remove_listing': (e,t) ->

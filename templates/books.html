@@ -69,9 +69,9 @@
              <ul class="list-group">
                {{ #each books this }}
                <li class="list-group-item">
-                 posted by: {{this.username}}
-                 who has {{get_trusts this}} trusted connections
-                 {{title}}, {{description}}
+                 <p>posted by: {{this.username}}</p>
+                <p> who is trusted by {{get_trusts this}} people</p>
+                 <p>{{title}}, {{description}}</p>
                   {{#if currentUser}}
                     {{#if sending_message _id }}
                      <form class="form-inline" role="form">

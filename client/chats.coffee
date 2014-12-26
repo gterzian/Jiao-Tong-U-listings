@@ -17,15 +17,19 @@ Template.conversations.get_user = (chat) ->
 
 Template.conversations.get_other = (conversation) ->
   if conversation.userid is Meteor.userId()
-    Meteor.users.find(_id: conversation.book.userid)
+    Meteor.users.findOne(_id: conversation.book.userid).username
   else
-    Meteor.users.find(_id: conversation.userid)
+    Meteor.users.findOne(_id: conversation.userid).username
+
+Template.conversations.get_contacts = ->
+  Meteor.users.find(_id: {$in:_.without(_.flatten((c.users for c in conversations.find(users: Meteor.userId()).fetch())), Meteor.userId())})
+ 
+Template.conversations.get_contacts_count = ->
+  Meteor.users.find(_id: {$in:_.without(_.flatten((c.users for c in conversations.find(users: Meteor.userId()).fetch())), Meteor.userId())}).count()
     
 Template.conversations.all_users = ->
   console.log(user) for user in Meteor.users.find().fetch()
 
-Template.conversations.trust_other = (other)->
-  trust.findOne(trusted:other._id, userId:Meteor.userId())
   
 Template.conversations.events
   'click #send_chat': (e, t) ->
@@ -53,16 +57,4 @@ Template.conversations.events
         watched: Meteor.userId()
       )
   
-  'click .trust_other': (e,t) ->
-    user_id = e.target.id
-    unless trust.findOne(userId:Meteor.userId())
-      _id = trust.insert
-        trusted: user_id
-        userId: Meteor.userId()
-  
-  'click .cancel_trust': (e,t) ->
-    user_id = e.target.id
-    to_cancel = trust.findOne(trusted: user_id,userId:Meteor.userId())._id
-    console.log(to_cancel)
-    trust.remove(to_cancel)
   
